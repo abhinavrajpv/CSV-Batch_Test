@@ -1,0 +1,7 @@
+employeeId,name,email,salary
+101,Arun,arun@gmail.com,35000
+102,Meera,,40000
+103,Ravi,ravi@gmail.com,-5000
+104,Anu,anu@gmail.com,abc
+105,Vijay,vijay@gmail.com,45000
+106,,sara@gmail.com,30000
