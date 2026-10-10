@@ -24,20 +24,24 @@ public class BatchConfig {
 
 	@Bean
 	public Step employeeStep(JobRepository jobRepository, PlatformTransactionManager transactionManager,
-			FlatFileItemReader<EmployeeCsvRecord> employeeReader,  AsyncItemProcessor<EmployeeCsvRecord, Employee> processor,
-            AsyncItemWriter<Employee> writer, EmployeeSkipListener skipListener) {
+			FlatFileItemReader<EmployeeCsvRecord> employeeReader,
+			AsyncItemProcessor<EmployeeCsvRecord, Employee> processor, AsyncItemWriter<Employee> writer,
+			EmployeeSkipListener skipListener, ValidatingAsyncProcessor validatingAsyncProcessor) {
 
 		return new StepBuilder("employeeStep", jobRepository)
-				.<EmployeeCsvRecord, Future<Employee>>chunk(10, transactionManager).reader(employeeReader).processor(processor)
-				.writer(writer).faultTolerant().skip(EmployeeValidationException.class).skipLimit(20)
-				.listener(skipListener).build();
+				.<EmployeeCsvRecord, Future<Employee>>chunk(10, transactionManager).reader(employeeReader)
+				.processor(validatingAsyncProcessor) 
+				.writer(writer).faultTolerant().skip(EmployeeValidationException.class)
+				.noRollback(EmployeeValidationException.class)
+				.skipLimit(20).listener(skipListener).build();
 	}
 
 	@Bean
 	public Step fileValidationStep(JobRepository jobRepository, PlatformTransactionManager transactionManager,
 			EmployeeFileValidationTasklet tasklet) {
 
-		return new StepBuilder("fileValidationStep", jobRepository).tasklet(tasklet, transactionManager).allowStartIfComplete(true).build();
+		return new StepBuilder("fileValidationStep", jobRepository).tasklet(tasklet, transactionManager)
+				.allowStartIfComplete(true).build();
 	}
 
 	@Bean
