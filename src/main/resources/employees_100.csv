@@ -99,3 +99,6 @@ employeeId,name,email,salary
 1098,Employee098,employee098@example.com,74000
 1099,Employee099,employee099@example.com,74500
 1100,Employee100,,75000
+1001,Employee001,amru@example.com,25500
+9990,Employee001,employee001@example.com,25500
+1001,Aatmik,employee001@example.com,25500
